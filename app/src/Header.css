@@ -1,0 +1,36 @@
+.header {
+    background-color: #282c34; /* Dark background */
+    padding: 10px 20px;        /* Padding around the header */
+    color: white;              /* Text color */
+    position: fixed;           /* Fixed at the top of the page */
+    top: 0;                    /* Align to the top */
+    width: 100%;               /* Full width */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for subtle effect */
+  }
+  
+  .nav {
+    display: flex;             /* Flexbox for layout */
+    justify-content: space-around; /* Space out the links */
+    align-items: center;       /* Center align items vertically */
+  }
+  
+  .nav-list {
+    list-style-type: none;     /* Remove default list styling */
+    margin: 0;                 /* Remove default margin */
+    padding: 0;                /* Remove default padding */
+    display: flex;
+  }
+  
+  .nav-item {
+    margin: 0 110px;            /* Margin around each link */
+  }
+  
+  .nav-item a {
+    color: white;              /* Link color */
+    text-decoration: none;     /* Remove underline from links */
+  }
+  
+  .nav-item a:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
