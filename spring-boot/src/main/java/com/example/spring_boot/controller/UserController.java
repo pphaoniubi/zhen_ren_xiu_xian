@@ -11,7 +11,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
         try {

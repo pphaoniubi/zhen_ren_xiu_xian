@@ -34,4 +34,12 @@ public class Progress {
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }

@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@Table(name="app_user")
 public class User {
 
     @Id
@@ -16,11 +18,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Sex sex;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "user_roles", // Name of the join table
+            name = "user_progress", // Name of the join table
             joinColumns = @JoinColumn(name = "user_id"), // Foreign key for User
-            inverseJoinColumns = @JoinColumn(name = "role_id") // Foreign key for Role
+            inverseJoinColumns = @JoinColumn(name = "progress_id") // Foreign key for Progress
     )
     private Set<Progress> users = new HashSet<>();
 
