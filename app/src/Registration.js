@@ -23,10 +23,11 @@ const Registration = () => {
     e.preventDefault();
     try {
       console.log(formData)
-      const response = await axios.post('http://localhost:8080/api/users/register', formData);
+      await axios.post('http://localhost:8080/api/users/register', formData);
       setMessage('Registration successful!');
     } catch (error) {
       setMessage('Registration failed: ' + error.response.data);
+      console.log('Registration failed: ' + error.response.data)
     }
   };
 

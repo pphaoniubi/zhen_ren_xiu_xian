@@ -21,6 +21,11 @@ const Header = () => {
             Register
           </Link>
           </li>
+          <li class="nav-item">
+          <Link to="/login">
+            Login
+          </Link>
+          </li>
         </ul>
       </nav>
     </header>

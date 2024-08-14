@@ -11,7 +11,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
         try {
@@ -20,4 +21,6 @@ public class UserController {
             throw new RuntimeException("Registration failed: " + e.getMessage());
         }
     }
+
+
 }
