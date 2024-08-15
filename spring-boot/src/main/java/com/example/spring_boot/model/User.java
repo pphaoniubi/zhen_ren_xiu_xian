@@ -1,8 +1,8 @@
 package com.example.spring_boot.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="app_user")
@@ -24,7 +24,15 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"), // Foreign key for User
             inverseJoinColumns = @JoinColumn(name = "progress_id") // Foreign key for Progress
     )
-    private Set<Progress> users = new HashSet<>();
+    private List<Progress> progress = new ArrayList<>();
+
+    public List<Progress> getProgress() {
+        return progress;
+    }
+
+    public void setProgress(List<Progress> progress) {
+        this.progress = progress;
+    }
 
     public User() {
     }
@@ -68,7 +76,6 @@ public class User {
         this.id = id;
     }
 
-
     public Sex getSex() {
         return sex;
     }
@@ -76,6 +83,5 @@ public class User {
     public void setSex(Sex sex) {
         this.sex = sex;
     }
-
 
 }

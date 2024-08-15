@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Progress.css'; // Import the CSS file for styling
+import axios from "axios";
 
 
 // api.js
@@ -24,19 +25,42 @@ export const startProgress = async () => {
   }
 };
 
-const ProgressBar = ({ progress }) => {
+
+
+function AddProgressFunc() {
+
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState("");
+  const [progressType, setProgressType] = useState("");
+  const [progressValue, setProgressValue] = useState(0);
+
+  const handleClick = async () => {
+    setLoading(true);
+  
+    try {
+      const response = await axios.post("http://localhost:8080/api/addProgress", {
+        taskName: "New Progress Task", // Replace with actual data
+      });
+  
+      setResponseMessage("Progress created successfully!");
+      console.log("Success:", response.data);
+    } catch (error) {
+      setResponseMessage("Failed to create progress");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <div className="progress-bar-container">
-      <div
-        className="progress-bar"
-        style={{ width: `${progress}%` }}
-      >
-        {progress}%
-      </div>
+    <div className="add_button">
+      <button className="centered-button"
+              onClick={handleClick}
+              disabled={loading}>
+      {loading ? "Loading..." : "Add Progress"}
+      </button>
     </div>
-  );
-};
+  )
 
+}
 
-
-export default ProgressBar;
+export default AddProgressFunc;

@@ -1,10 +1,8 @@
 import React, { useState, useEffect  } from 'react';
-import ProgressBar, { startProgress } from './Progress';
+import { startProgress } from './Progress';
 import Header from './Header';
 import './App.css';
 import Popup from './Popup'
-import Registration from './Registration';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 
 const OpenPopup = () => {
@@ -63,13 +61,25 @@ function Home() {
   };
 
   
+const ProgressBar = ({ progress }) => {
+  return (
+    <div className="progress-bar-container">
+      <div
+        className="progress-bar"
+        style={{ width: `${progress}%` }}
+      >
+        {progress}%
+      </div>
+    </div>
+  );
+};
 
 
   return (
 
     <div className="App">
     <h1>Progress Bar</h1>
-    <Header />
+    
     <ProgressBar progress={progress} />
 
     <button onClick={handleProgressStart} disabled={progressStarted}>

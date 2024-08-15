@@ -16,11 +16,33 @@ public class Progress {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<>();
     private ProgressType progressType;
-
+    private int duration;
     public Progress() {}
 
-    public Progress(LocalDateTime startTime) {
+    public Progress(LocalDateTime startTime, ProgressType progressType, int duration) {
         this.startTime = startTime;
+        this.progressType = progressType;
+        this.duration = duration;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public ProgressType getProgressType() {
+        return progressType;
+    }
+
+    public void setProgressType(ProgressType progressType) {
+        this.progressType = progressType;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public Long getId() {
