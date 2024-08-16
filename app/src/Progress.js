@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './Progress.css'; // Import the CSS file for styling
 import axios from "axios";
 
@@ -90,9 +90,49 @@ function AddProgressFunc() {
 
 }
 
-function showProgressFunc() {
+function ShowProgressFunc() {
 
+  const [progresses, setProgresses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProgresses = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/progress/all');
+        setProgresses(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+      }
+    };
+
+    fetchProgresses();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error fetching data</div>;
+  }
+
+  return (
+    <div>
+      <h1>Progress List</h1>
+      <ul>
+        {progresses.map(progress => (
+          <li key={progress.id}>
+            <p>Type: {progress.progressType}</p>
+            <p>Duration: {progress.duration} mins</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 
 }
 
-export {AddProgressFunc, showProgressFunc};
+export {AddProgressFunc, ShowProgressFunc};
