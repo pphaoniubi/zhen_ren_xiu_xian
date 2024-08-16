@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/progress")
 public class ProgressController {
@@ -18,7 +20,7 @@ public class ProgressController {
     @Autowired
     private ProgressService progressService;
 
-    @PostMapping("/api/{progressId}/enroll")
+    @PostMapping("/{progressId}/enroll")
     public ResponseEntity<User> enrollUserToProgress(@PathVariable Long progressId) {
         try {
             // Get the logged-in user's username
@@ -32,12 +34,20 @@ public class ProgressController {
         }
     }
 
-    @PostMapping("/api/addProgress")
+    @PostMapping("/add")
     public Progress addProgress(@RequestBody Progress progress) {
     try {
-        return progressService.addProress(progress.getProgressType(), progress.getDuration());
+
+        System.out.println("Received progressType: " + progress.getProgressType());
+        System.out.println("Received duration: " + progress.getDuration());
+        return progressService.addProgress(progress.getProgressType(), progress.getDuration());
     } catch (Exception e) {
         throw new RuntimeException("addProgress failed: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/getAll")
+    public List<Progress> getAllProgress(){
+        return progressService.getAllProgress();
     }
 }

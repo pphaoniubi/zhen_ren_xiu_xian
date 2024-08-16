@@ -25,23 +25,23 @@ export const startProgress = async () => {
   }
 };
 
-
-
 function AddProgressFunc() {
 
   const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
   const [progressType, setProgressType] = useState("");
-  const [progressValue, setProgressValue] = useState(0);
+  const [duration, setDuration] = useState(0);
 
-  const handleClick = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
     setLoading(true);
   
     try {
-      const response = await axios.post("http://localhost:8080/api/addProgress", {
-        taskName: "New Progress Task", // Replace with actual data
+      const response = await axios.post("http://localhost:8080/api/progress/add", {
+        progressType: progressType, // Replace with actual data
+        duration: duration
       });
-  
+      console.log(response)
       setResponseMessage("Progress created successfully!");
       console.log("Success:", response.data);
     } catch (error) {
@@ -53,14 +53,46 @@ function AddProgressFunc() {
   };
   return (
     <div className="add_button">
-      <button className="centered-button"
-              onClick={handleClick}
-              disabled={loading}>
-      {loading ? "Loading..." : "Add Progress"}
-      </button>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Progress Type:
+          <br />
+            <input
+              type="text"
+              value={progressType}
+              onChange={(e) => setProgressType(e.target.value)} // Update progressType state
+              required
+            />
+        </label>
+        <br />
+        <br />
+        <label>
+          duration:
+          <br />
+            <input
+              type="number"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)} // Update progressType state
+              required
+            />
+        </label>
+        <br />
+        <br />
+        <button className="centered-button"
+                type="submit"
+                disabled={loading}>
+        {loading ? "Loading..." : "Add Progress"}
+        </button>
+      {responseMessage && <p>{responseMessage}</p>}
+      </form>
     </div>
   )
 
 }
 
-export default AddProgressFunc;
+function showProgressFunc() {
+
+
+}
+
+export {AddProgressFunc, showProgressFunc};

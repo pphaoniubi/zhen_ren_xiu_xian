@@ -9,6 +9,7 @@ import com.example.spring_boot.repository.ProgressRepository;
 import com.example.spring_boot.model.Progress;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ProgressService {
@@ -23,7 +24,7 @@ public class ProgressService {
         this.userRepository = userRepository;
     }
 
-    public Progress addProress(ProgressType progressType, int duration) {
+    public Progress addProgress(ProgressType progressType, int duration) {
         Progress progress = new Progress(LocalDateTime.now(), progressType, duration);
         return progressRepository.save(progress);
     }
@@ -46,6 +47,11 @@ public class ProgressService {
         userRepository.save(user);
         progressRepository.save(progress);
         return user;
+    }
+
+    public List<Progress> getAllProgress() {
+
+        return progressRepository.findAll();
     }
 
 }
