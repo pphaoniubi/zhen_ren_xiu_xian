@@ -50,7 +50,6 @@ public class ProgressService {
     }
 
     public List<Progress> getAllProgress() {
-
         return progressRepository.findAll();
     }
 

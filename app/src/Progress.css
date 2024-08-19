@@ -41,3 +41,42 @@
 .centered-button:hover {
   background-color: #0056b3;
 }
+
+/* Progress.css */
+
+.centered-container {
+  display: flex;
+  flex-direction: column; /* Stacks heading and table vertically */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.table-heading {
+  margin-bottom: 20px; /* Adds space between the heading and the table */
+  font-size: 24px;     /* Adjust font size */
+  color: #333;         /* Optional: color for the heading */
+}
+
+table {
+  border-collapse: collapse;
+  width: 80%;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}

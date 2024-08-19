@@ -21,6 +21,5 @@ public class UserController {
             throw new RuntimeException("Registration failed: " + e.getMessage());
         }
     }
-
-
+    
 }

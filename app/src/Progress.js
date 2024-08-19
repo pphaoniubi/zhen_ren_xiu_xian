@@ -99,7 +99,7 @@ function ShowProgressFunc() {
   useEffect(() => {
     const fetchProgresses = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/progress/all');
+        const response = await axios.get('http://localhost:8080/api/progress/getAll');
         setProgresses(response.data);
         setLoading(false);
       } catch (err) {
@@ -120,17 +120,34 @@ function ShowProgressFunc() {
   }
 
   return (
-    <div>
-      <h1>Progress List</h1>
-      <ul>
+    <div className="centered-container">
+    <h1 className="table-heading">Progress Overview</h1>
+    <table border="1" cellPadding="10" cellSpacing="0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Duration (mins)</th>
+          <th>Actions</th> {/* Actions column for the button */}
+        </tr>
+      </thead>
+      <tbody>
         {progresses.map(progress => (
-          <li key={progress.id}>
-            <p>Type: {progress.progressType}</p>
-            <p>Duration: {progress.duration} mins</p>
-          </li>
+          <tr key={progress.id}>
+            <td>{progress.id}</td>
+            <td>{progress.progressType}</td>
+            <td>{progress.duration}</td>
+            <td>
+              <button onClick={() => AddProgressFunc(progress.id)}>
+                Enroll
+              </button>
+            </td>
+          
+          </tr>
         ))}
-      </ul>
-    </div>
+      </tbody>
+    </table>
+  </div>
   );
 
 }

@@ -18,25 +18,30 @@ function Login() {
         try {
             const response = await fetch('http://localhost:8080/api/users/login', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(loginData)
             });
-
+            
             if (!response.ok) {
+                console.log(response.status)
                 throw new Error('Invalid credentials');
             }
 
             const data = await response.json();
+            console.log(response.status)
 
             // Store the JWT token
             localStorage.setItem('token', data.token);
 
             // Redirect to the dashboard
-            navigate('/');
+            
         } catch (error) {
-            setError(error.message);
+            console.log("in error")
+            setError("error: " + error.message);
         }
     };
 

@@ -15,8 +15,10 @@ public class Progress {
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private ProgressType progressType;
+
     private int duration;
     public Progress() {}
 

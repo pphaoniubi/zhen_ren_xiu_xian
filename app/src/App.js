@@ -16,7 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/progress" element={<AddProgressFunc />} />
+        
         <Route path="/progress" element={<ShowProgressFunc />} />
         </Routes>
         </>
