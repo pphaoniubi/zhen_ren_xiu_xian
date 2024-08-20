@@ -70,6 +70,46 @@ function Login() {
                 <button type="submit">Login</button>
             </form>
             {error && <div className="error-message">{error}</div>}
+            <Logout />
+        </div>
+    );
+}
+
+function Logout() {
+    const handleClick = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch('http://localhost:8080/api/users/logout', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+            });
+            
+            if (!response.ok) {
+                console.log(response.status)
+                throw new Error('Log out failed');
+            }
+
+
+            console.log(response.status)
+
+
+            // Redirect to the dashboard
+            
+        } catch (error) {
+            console.log("in error")
+        }
+    };
+
+    return (
+        <div>
+            <button onClick={handleClick}>
+                Log Out
+            </button>
         </div>
     );
 }

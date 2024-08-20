@@ -7,11 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class AuthController {
@@ -23,30 +28,48 @@ public class AuthController {
     @PostMapping("api/users/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         try {
-            // Authenticate the user using the authentication manager
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+            //get previous authenticated user information
+            Authentication prev_auth = SecurityContextHolder.getContext().getAuthentication();
 
-            // Set the authentication in the security context
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            //check if a prev user is logged in
+            if (prev_auth != null && prev_auth.isAuthenticated()
+                     && !prev_auth.getPrincipal().equals("anonymousUser")
+                     && ((UserDetails)(prev_auth.getPrincipal())).getUsername().equals(user.getUsername())){
 
-            if (authentication != null && authentication.isAuthenticated()
-                    && !authentication.getPrincipal().equals("anonymousUser")
-            && ((UserDetails)(authentication.getPrincipal())).getUsername().equals(user.getUsername())) {
-                System.out.println("user already logged in " + user.getUsername());
+                return ResponseEntity.status(401).body("User Already Logged in");
             }
 
-            // Load user details after successful authentication
-            UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
+                // Authenticate the user using the authentication manager
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
-            System.out.println(authentication);
+                // Set the authentication in the security context
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Return user details as a response (this is optional, you may return a JWT token here instead)
-            return ResponseEntity.ok(userDetails);
+                // Load user details after successful authentication
+                UserDetails userDetails_ret = userService.loadUserByUsername(user.getUsername());
+
+                return ResponseEntity.ok(userDetails_ret);
+
+
         } catch (Exception e) {
-            // In case of authentication failure, return a 401 status
 
             return ResponseEntity.status(401).body("Invalid username or password");
+        }
+    }
+
+    @GetMapping("api/users/logout")
+    public String logout(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        HttpSession session = request.getSession(false);
+        if (authentication != null && session != null) {
+            session.invalidate();
+            SecurityContextHolder.getContext().setAuthentication(null);
+            SecurityContextHolder.clearContext();
+            return "logged out successfully";
+        } else {
+            return "no active user";
         }
     }
 }
