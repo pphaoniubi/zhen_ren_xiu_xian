@@ -1,5 +1,6 @@
 package com.example.spring_boot.service;
 
+import com.example.spring_boot.model.Progress;
 import com.example.spring_boot.model.User;
 import com.example.spring_boot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.example.spring_boot.model.Sex;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,4 +52,8 @@ public class UserService implements UserDetailsService  {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
+
+    public List<Progress> getProgressByUsername(String username) throws Exception {
+        return userRepository.findProgressesByUsername(username);
+    }
 }

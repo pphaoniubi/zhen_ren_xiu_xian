@@ -1,5 +1,8 @@
 package com.example.spring_boot.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -24,18 +27,19 @@ public class User implements UserDetails {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "user_progress", // Name of the join table
-            joinColumns = @JoinColumn(name = "user_id"), // Foreign key for User
-            inverseJoinColumns = @JoinColumn(name = "progress_id") // Foreign key for Progress
+            name = "user_progress",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "progress_id")
     )
-    private List<Progress> progress = new ArrayList<>();
+    @JsonIgnoreProperties("user")
+    private List<Progress> progresses;
 
     public List<Progress> getProgress() {
-        return progress;
+        return progresses;
     }
 
-    public void setProgress(List<Progress> progress) {
-        this.progress = progress;
+    public void setProgress(List<Progress> progresses) {
+        this.progresses = progresses;
     }
 
     public User() {

@@ -1,9 +1,12 @@
 package com.example.spring_boot.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.ArrayList;
 
 @Entity
 public class Progress {
@@ -11,10 +14,12 @@ public class Progress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startTime;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<User> users = new ArrayList<>();
+    @ManyToMany(mappedBy = "progresses", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("progress")
+    private List<User> users;
 
     @Enumerated(EnumType.STRING)
     private ProgressType progressType;

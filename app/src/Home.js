@@ -3,6 +3,8 @@ import { startProgress } from './Progress';
 import Header from './Header';
 import './App.css';
 import Popup from './Popup'
+import throttle  from 'lodash/throttle';
+import debounce  from 'lodash/debounce';
 
 
 const OpenPopup = () => {
@@ -21,33 +23,44 @@ const OpenPopup = () => {
 
 function Home() {
 
-  const totalDays = 21;
-  const startDate = new Date('2024-08-01')
   const [progress, setProgress] = useState(0);
   const [progressStarted, setProgressStarted] = useState(false);
   const [startTime, setStartTime] = useState(null);
 
-  useEffect(() => {
+  
     const fetchServerTime = async () => {
       try {
-        const response = await fetch('http://localhost:8080/api/current-time'); // Replace with your actual API endpoint
+          const response = await fetch('http://localhost:8080/api/users/getProgressByUser', {
+          method: 'GET',
+          credentials: 'include',   //if dont include, spring boot treat as anonymous
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+        }})
+        
         const data = await response.json();
-        const serverTime = new Date(data.currentTime);
-        const timeDifference = serverTime - startDate;
-        const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-        const calculatedProgress = Math.min((daysPassed / totalDays) * 100, 100);
-        setProgress(calculatedProgress);
+        console.log(data);
+        const currentTime = new Date();
+        const startTime = new Date(data[0].startTime);
+        const timeElapsed = currentTime - startTime;
+        const totalDays = data[0].duration * 24 * 60 * 60 * 1000;
+
+        const percentageElapsed = (timeElapsed / totalDays) * 100;
+        console.log(percentageElapsed); 
+        
+        setProgress(percentageElapsed);
+
       } catch (error) {
         console.error('Error fetching server time:', error);
       }
     };
+    
+    const debouncedFetchServerTime = debounce(fetchServerTime, 10000);
 
-    fetchServerTime();
-    console.log(progress)
-    const interval = setInterval(fetchServerTime, 1000 * 60 * 60 * 24);
-    return () => clearInterval(interval);
+    useEffect(() => {
+      debouncedFetchServerTime();
+    });
 
-  }, [startDate, totalDays]);
 
 
   const handleProgressStart = async () => {
