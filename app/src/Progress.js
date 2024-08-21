@@ -25,76 +25,14 @@ export const startProgress = async () => {
   }
 };
 
-function AddProgressFunc() {
-
-  const [loading, setLoading] = useState(false);
-  const [responseMessage, setResponseMessage] = useState("");
-  const [progressType, setProgressType] = useState("");
-  const [duration, setDuration] = useState(0);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    setLoading(true);
-  
-    try {
-      const response = await axios.post("http://localhost:8080/api/progress/add", {
-        progressType: progressType, // Replace with actual data
-        duration: duration
-      });
-      console.log(response)
-      setResponseMessage("Progress created successfully!");
-      console.log("Success:", response.data);
-    } catch (error) {
-      setResponseMessage("Failed to create progress");
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  return (
-    <div className="add_button">
-      <form onSubmit={handleSubmit}>
-        <label>
-          Progress Type:
-          <br />
-            <input
-              type="text"
-              value={progressType}
-              onChange={(e) => setProgressType(e.target.value)} // Update progressType state
-              required
-            />
-        </label>
-        <br />
-        <br />
-        <label>
-          duration:
-          <br />
-            <input
-              type="number"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)} // Update progressType state
-              required
-            />
-        </label>
-        <br />
-        <br />
-        <button className="centered-button"
-                type="submit"
-                disabled={loading}>
-        {loading ? "Loading..." : "Add Progress"}
-        </button>
-      {responseMessage && <p>{responseMessage}</p>}
-      </form>
-    </div>
-  )
-
-}
 
 function ShowProgressFunc() {
 
   const [progresses, setProgresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [progressId, setProgressId] = useState(0);
+  const [responseMessage, setResponseMessage] = useState("");
 
   useEffect(() => {
     const fetchProgresses = async () => {
@@ -110,6 +48,26 @@ function ShowProgressFunc() {
 
     fetchProgresses();
   }, []);
+
+  const handleEnrol = async (progressId) => {
+    console.log(typeof progressId)
+    try {
+      const response = await axios.post(`http://localhost:8080/api/progress/${progressId}/enrol`, null, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
+      console.log(response)
+      setResponseMessage("Progress created successfully!");
+      console.log("Success:", response.data);
+    } catch (error) {
+      setResponseMessage("Failed to create progress");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -127,7 +85,7 @@ function ShowProgressFunc() {
         <tr>
           <th>ID</th>
           <th>Type</th>
-          <th>Duration (mins)</th>
+          <th>Duration</th>
           <th>Actions</th> {/* Actions column for the button */}
         </tr>
       </thead>
@@ -138,7 +96,7 @@ function ShowProgressFunc() {
             <td>{progress.progressType}</td>
             <td>{progress.duration}</td>
             <td>
-              <button onClick={() => AddProgressFunc(progress.id)}>
+              <button onClick={() => handleEnrol(progress.id)}>
                 Enroll
               </button>
             </td>
@@ -152,4 +110,4 @@ function ShowProgressFunc() {
 
 }
 
-export {AddProgressFunc, ShowProgressFunc};
+export {ShowProgressFunc};

@@ -10,15 +10,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -71,5 +69,12 @@ public class AuthController {
         } else {
             return "no active user";
         }
+    }
+
+    @GetMapping("api/users/isAuthenticated")
+    public boolean isAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authentication Object: " + authentication);
+        return authentication.isAuthenticated() && !(authentication.getPrincipal().equals("anonymousUser"));
     }
 }
