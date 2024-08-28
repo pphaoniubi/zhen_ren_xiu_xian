@@ -3,7 +3,6 @@ import { startProgress } from './Progress';
 import Header from './Header';
 import './App.css';
 import Popup from './Popup'
-import throttle  from 'lodash/throttle';
 import debounce  from 'lodash/debounce';
 
 
@@ -23,9 +22,12 @@ const OpenPopup = () => {
 
 function Home() {
 
-  const [progress, setProgress] = useState(0);
+  const [percentage, setPercentage] = useState(0);
   const [progressStarted, setProgressStarted] = useState(false);
   const [startTime, setStartTime] = useState(null);
+  const [progresses, setProgresses] = useState(null);
+  const [progressType , setProgressType] = useState(null);
+  let bar_lst = [];
 
   
     const fetchServerTime = async () => {
@@ -39,7 +41,8 @@ function Home() {
         }})
         
         const data = await response.json();
-        console.log(data);
+        setProgresses(data);
+        console.log(data[0]);
         const currentTime = new Date();
         const startTime = new Date(data[0].startTime);
         const timeElapsed = currentTime - startTime;
@@ -47,15 +50,33 @@ function Home() {
 
         const percentageElapsed = (timeElapsed / totalDays) * 100;
         console.log(percentageElapsed); 
+
+        for (var i = 0; i < data.length; i++) {
+          const startTime = new Date(data[i].startTime);
+          const timeElapsed = currentTime - startTime;
+          const totalDays = data[i].duration * 24 * 60 * 60 * 1000;
+
+          const percentageElapsed = (timeElapsed / totalDays) * 100;
+          console.log(data.length); 
+          bar_lst.push(<div className="progress-bar-container">
+            <div
+              className="progress-bar"
+              style={{ width: `${percentageElapsed}%` }}
+            >
+              {percentageElapsed}%
+            </div>
+          </div>);
+        }
+        console.log(bar_lst); 
         
-        setProgress(percentageElapsed);
+        setPercentage(percentageElapsed);
 
       } catch (error) {
         console.error('Error fetching server time:', error);
       }
     };
     
-    const debouncedFetchServerTime = debounce(fetchServerTime, 10000);
+    const debouncedFetchServerTime = debounce(fetchServerTime, 6000);
 
     useEffect(() => {
       debouncedFetchServerTime();
@@ -73,35 +94,19 @@ function Home() {
     }
   };
 
-  
-const ProgressBar = ({ progress }) => {
-  return (
-    <div className="progress-bar-container">
-      <div
-        className="progress-bar"
-        style={{ width: `${progress}%` }}
-      >
-        {progress}%
-      </div>
-    </div>
-  );
-};
 
 
   return (
 
     <div className="App">
-    <h1>Progress Bar</h1>
+    <h1>{progressType}</h1>
     
-    <ProgressBar progress={progress} />
+    <ul>{bar_lst}</ul>
 
     <button onClick={handleProgressStart} disabled={progressStarted}>
         Start Progress
     </button>
 
-    {progressStarted && startTime && (
-        <ProgressBar startTime={startTime} />
-    )}
     <OpenPopup />
     </div>
 
