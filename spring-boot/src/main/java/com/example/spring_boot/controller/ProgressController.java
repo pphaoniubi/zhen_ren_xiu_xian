@@ -56,4 +56,19 @@ public class ProgressController {
     public List<Progress> getAllProgress(){
         return progressService.getAllProgress();
     }
+
+    @GetMapping("/{progressId}/checkReady")
+    public ResponseEntity<Boolean> checkIfProgressReady(@PathVariable Long progressId) {
+        boolean isReady = progressService.isProgressReady(progressId);
+        return ResponseEntity.ok(isReady);
+    }
+
+    @GetMapping("/{id}/user-count")
+    public int getUserCount(@PathVariable Long id) {
+        return progressService.getNumberofUser(id);
+    }
+    @GetMapping("/{id}/getUsersById")
+    public List<User> getUserById(@PathVariable Long id) {
+        return progressService.geUserByProgressId(id);
+    }
 }

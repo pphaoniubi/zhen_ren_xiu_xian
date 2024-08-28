@@ -67,29 +67,6 @@ function AddProgressFunc() {
 }
 
 
-// api.js
-export const startProgress = async () => {
-  try {
-    const response = await fetch('http://localhost:8080/api/progress/start', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to start progress: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return data.startTime; // Return the actual start time
-  } catch (error) {
-    console.error('Error starting progress:', error);
-    throw error; // Re-throw error to handle it in the component
-  }
-};
-
-
 function ShowProgressFunc() {
 
   const [progresses, setProgresses] = useState([]);
@@ -97,6 +74,7 @@ function ShowProgressFunc() {
   const [error, setError] = useState(null);
   const [progressId, setProgressId] = useState(0);
   const [responseMessage, setResponseMessage] = useState("");
+  const [userCounts, setUserCounts] = useState(0);
 
   useEffect(() => {
     const fetchProgresses = async () => {
@@ -113,8 +91,33 @@ function ShowProgressFunc() {
     fetchProgresses();
   }, []);
 
+  useEffect(() => {
+    // Fetch user count for each progress after fetching progresses
+    const fetchUserCounts = async () => {
+      const counts = {};
+      for (const progress of progresses) {
+        try {
+          const response = await fetch(`http://localhost:8080/api/progress/${progress.id}/user-count`);
+          if (response.ok) {
+            const count = await response.json();
+            counts[progress.id] = count;
+          } else {
+            console.error(`Failed to fetch user count for progress ${progress.id}`);
+          }
+        } catch (error) {
+          console.error('Error fetching user count:', error);
+        }
+      }
+      setUserCounts(counts);
+      console.log(userCounts)
+    }
+
+      if (progresses.length) {
+        fetchUserCounts();
+      }
+    },[progresses])
+
   const handleEnrol = async (progressId) => {
-    console.log(typeof progressId)
     try {
       const response = await axios.post(`http://localhost:8080/api/progress/${progressId}/enrol`, null, {
         headers: {
@@ -150,6 +153,7 @@ function ShowProgressFunc() {
           <th>ID</th>
           <th>Type</th>
           <th>Duration</th>
+          <th># of users Enrolled</th>
           <th>Actions</th> {/* Actions column for the button */}
         </tr>
       </thead>
@@ -159,6 +163,7 @@ function ShowProgressFunc() {
             <td>{progress.id}</td>
             <td>{progress.progressType}</td>
             <td>{progress.duration}</td>
+            <td>{userCounts[progress.id] || 0}/10</td>
             <td>
               <button onClick={() => handleEnrol(progress.id)}>
                 Enroll

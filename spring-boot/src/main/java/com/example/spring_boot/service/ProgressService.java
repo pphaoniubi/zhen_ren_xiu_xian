@@ -18,6 +18,7 @@ public class ProgressService {
 
     private final UserRepository userRepository;
 
+    private static final int USER_THRESHOLD = 10;
 
     public ProgressService(ProgressRepository progressRepository, UserRepository userRepository) {
         this.progressRepository = progressRepository;
@@ -51,6 +52,21 @@ public class ProgressService {
 
     public List<Progress> getAllProgress() {
         return progressRepository.findAll();
+    }
+
+    public boolean isProgressReady(Long progressId) {
+        Progress progress = progressRepository.findById(progressId)
+                .orElseThrow(() -> new RuntimeException("Progress not found"));
+        int userCount = progress.getUsers().size();
+        return userCount >= USER_THRESHOLD;
+    }
+
+    public int getNumberofUser(Long progressId){
+        return progressRepository.countUsersByProgressId(progressId);
+    }
+
+    public List<User> geUserByProgressId(Long progressId) {
+        return progressRepository.findUsersByProgressId(progressId);
     }
 
 }
