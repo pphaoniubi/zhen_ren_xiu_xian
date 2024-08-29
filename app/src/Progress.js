@@ -72,7 +72,6 @@ function ShowProgressFunc() {
   const [progresses, setProgresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [progressId, setProgressId] = useState(0);
   const [responseMessage, setResponseMessage] = useState("");
   const [userCounts, setUserCounts] = useState(0);
 
