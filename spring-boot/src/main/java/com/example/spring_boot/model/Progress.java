@@ -2,6 +2,7 @@ package com.example.spring_boot.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,7 +25,23 @@ public class Progress {
     @Enumerated(EnumType.STRING)
     private ProgressType progressType;
 
+    @OneToMany(mappedBy = "progress", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Photo> photos;
+
     private int duration;
+
+
+
+    //getters and setters
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
+
     public Progress() {}
 
     public Progress(LocalDateTime startTime, ProgressType progressType, int duration) {

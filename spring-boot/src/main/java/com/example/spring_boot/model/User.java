@@ -34,6 +34,13 @@ public class User implements UserDetails {
     @JsonIgnoreProperties("user")
     private List<Progress> progresses;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private List<Photo> photos;
+
+
+    //getters and setters
     public List<Progress> getProgress() {
         return progresses;
     }

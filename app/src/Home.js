@@ -6,6 +6,47 @@ import './App.css';
 import axios from "axios";
 import './Popup.css';
 
+const FileUpload = () => {
+  const [file, setFile] = useState(null);
+  const [userId, setUserId] = useState(1); // Example user ID
+  const [progressId, setProgressId] = useState(1); // Optional progress ID
+  
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]); // Set selected file
+  };
+  
+  const uploadPhoto = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('userId', userId);
+      if (progressId) {
+          formData.append('progressId', progressId);
+      }
+      await axios.post(`http://localhost:8080/api/photo/add/${progressId}/${userId}`, formData, {
+        headers: {
+
+        }, 
+      withCredentials: true,
+    });
+    alert('File uploaded successfully');
+    } catch (err) {
+      console.error(err);
+      alert('Error uploading file');
+    } finally {
+
+    }
+  }
+  return (
+    <div>
+        <h1>Upload File</h1>
+        <input type="file" onChange={handleFileChange} />
+        <button onClick={uploadPhoto}>Upload</button>
+    </div>
+);
+};
+
+
 
 function Home() {
 
@@ -110,7 +151,6 @@ const Popup = ({ onClose }) => {
     };
     
 
-
     useEffect(() => {
       fetchServerTime();
     }, []);
@@ -122,7 +162,7 @@ const Popup = ({ onClose }) => {
     <h1>{progressType}</h1>
     
     <ul>
-        {progresses.map((progress, index) => (
+        {(Array.isArray(progresses) ? progresses : []).map((progress, index) => (
           <li key={index}>
             <div className="progress-bar-container">
               <h2>{progress.progressType}</h2>
@@ -138,6 +178,7 @@ const Popup = ({ onClose }) => {
       {isPopupOpen && (
         <Popup onClose={handleClosePopup} data={users} loading={loading} />
       )}
+      <FileUpload />
     </div>
 
   );
