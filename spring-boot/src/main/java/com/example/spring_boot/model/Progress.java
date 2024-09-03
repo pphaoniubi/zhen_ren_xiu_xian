@@ -1,13 +1,9 @@
 package com.example.spring_boot.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -20,7 +16,7 @@ public class Progress {
     private LocalDateTime startTime;
 
     @ManyToMany(mappedBy = "progresses", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonIgnore
     private List<User> users;
 
     @Enumerated(EnumType.STRING)

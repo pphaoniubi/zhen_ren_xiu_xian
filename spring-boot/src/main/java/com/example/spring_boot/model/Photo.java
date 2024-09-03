@@ -17,11 +17,11 @@ public class Photo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonBackReference
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "progress_id", nullable = true)
+    @JoinColumn(name = "progress_id")
     @JsonBackReference
     private Progress progress;
 
