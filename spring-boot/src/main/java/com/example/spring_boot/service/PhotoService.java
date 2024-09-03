@@ -7,6 +7,9 @@ import com.example.spring_boot.repository.PhotoRepository;
 import com.example.spring_boot.repository.ProgressRepository;
 import com.example.spring_boot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +46,7 @@ public class PhotoService {
     }
 
 
-    public String storeFile(MultipartFile file, Long userId, Long progressId) {
+    public String storeFile(MultipartFile file, Long progressId) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         try {
@@ -54,8 +57,12 @@ public class PhotoService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            // Link photo to user and progress
-            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+            // Get current authenticated user
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
             Photo photo = new Photo();
             photo.setFileName(fileName);
             photo.setUser(user);

@@ -31,7 +31,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "progress_id")
     )
-    @JsonIgnoreProperties("user")
+    @JsonManagedReference
     private List<Progress> progresses;
 
 

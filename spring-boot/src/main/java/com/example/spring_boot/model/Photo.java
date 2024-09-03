@@ -29,6 +29,8 @@ public class Photo {
 
     }
 
+    //getters and setters
+
     public Progress getProgress() {
         return progress;
     }

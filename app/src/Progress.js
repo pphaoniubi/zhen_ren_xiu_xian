@@ -3,7 +3,7 @@ import './Progress.css'; // Import the CSS file for styling
 import axios from "axios";
 
 
-function AddProgressFunc() {
+export function AddProgressFunc() {
 
   const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
@@ -25,7 +25,10 @@ function AddProgressFunc() {
       setResponseMessage("Progress created successfully!");
       console.log("Success:", response.data);
     } catch (error) {
-  };
+    } finally {
+    setLoading(false);
+  }
+}
   return (
     <div className="add_button">
       <form onSubmit={handleSubmit}>
@@ -62,8 +65,6 @@ function AddProgressFunc() {
       </form>
     </div>
   )
-
-  }
 }
 
 

@@ -17,12 +17,11 @@ public class PhotoController {
         this.photoStorageService = photoStorageService;
     }
 
-    @PostMapping("/add/{progressId}/{userId}")
+    @PostMapping("/add/{progressId}")
     public ResponseEntity<String> uploadFile(
             @RequestParam("file") MultipartFile file,
-            @PathVariable Long userId,
             @RequestParam(value = "progressId") Long progressId) {
-        String fileName = photoStorageService.storeFile(file, userId, progressId);
+        String fileName = photoStorageService.storeFile(file, progressId);
         return ResponseEntity.ok("File uploaded successfully: " + fileName);
     }
 }

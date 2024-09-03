@@ -1,5 +1,5 @@
 import React, { useState, useEffect  } from 'react';
-import { startProgress } from './Progress';
+import { AddProgressFunc, startProgress } from './Progress';
 import Header from './Header';
 import './App.css';
 //import Popup from './Popup'
@@ -19,11 +19,10 @@ const FileUpload = () => {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('userId', userId);
       if (progressId) {
           formData.append('progressId', progressId);
       }
-      await axios.post(`http://localhost:8080/api/photo/add/${progressId}/${userId}`, formData, {
+      await axios.post(`http://localhost:8080/api/photo/add/${progressId}`, formData, {
         headers: {
 
         }, 

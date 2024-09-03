@@ -1,5 +1,6 @@
 package com.example.spring_boot.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -19,7 +20,7 @@ public class Progress {
     private LocalDateTime startTime;
 
     @ManyToMany(mappedBy = "progresses", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("progress")
+    @JsonBackReference
     private List<User> users;
 
     @Enumerated(EnumType.STRING)

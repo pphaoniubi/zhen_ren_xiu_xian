@@ -24,7 +24,7 @@
   display: flex;
   justify-content: center; /* Horizontal centering */
   align-items: center;     /* Vertical centering */
-  height: 100vh;           /* Full viewport height */
+  height: 50vh;           /* Full viewport height */
 }
 
 /* Style for the button */
