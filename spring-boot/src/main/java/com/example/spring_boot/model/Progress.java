@@ -23,7 +23,7 @@ public class Progress {
     private ProgressType progressType;
 
     @OneToMany(mappedBy = "progress", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "progress-photo")
     private List<Photo> photos;
 
     private int duration;
